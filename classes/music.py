@@ -1,8 +1,14 @@
+from pygame.mixer import init as music_init
 from pygame.mixer_music import load as music_load
 from pygame.mixer_music import play as music_play
+from pygame.mixer_music import stop as music_stop
 
-class MusicPlayer():
+class GameMusic():
     
-    def intro(self):
-        music_load.load('./music/intro.mp3')
-        music_play(loops=1)
+    def play(self, music_file):
+        music_init()
+        music_load(music_file)
+        music_play()
+    
+    def stop():
+        music_stop()

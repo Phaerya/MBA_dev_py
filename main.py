@@ -1,6 +1,7 @@
 import pygame
 import sys
 from classes.robot_npc import Robot
+from classes.music import GameMusic
 from personnage import Personnage
 # Initialisation de Pygame
 pygame.init()
@@ -28,10 +29,12 @@ all_sprites.add(personnage)
 # Boucle principale du jeu
 
 robot = Robot()
+music = GameMusic()
 all_sprites.add(robot)
 
 running = True
 while running:
+    music.play("./assets/music/intro.mp3")
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
