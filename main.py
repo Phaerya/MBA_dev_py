@@ -28,7 +28,7 @@ all_sprites.add(personnage)
 # Boucle principale du jeu
 
 robot = Robot()
-all_sprites = pygame.sprite.Group([robot])
+all_sprites.add(robot)
 
 running = True
 while running:
