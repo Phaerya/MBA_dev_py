@@ -46,7 +46,7 @@ class Overworld:
 
 		# setup 
 		self.display_surface = surface 
-		self.max_level = 3
+		self.max_level = 2
 		self.current_level = start_level
 		self.create_level = create_level
 

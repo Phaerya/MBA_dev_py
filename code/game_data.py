@@ -77,7 +77,6 @@ level_5 = {
 		'node_graphics':'../graphics/overworld/5',
 		'unlock': 5}
 
-
 levels = {
 	0: level_0,
 	1: level_1,
