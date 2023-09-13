@@ -53,7 +53,7 @@ class Overworld:
 		# movement logic
 		self.moving = False
 		self.move_direction = pygame.math.Vector2(0,0)
-		self.speed = 8
+		self.speed = 10
 
 		# sprites 
 		self.setup_nodes()
@@ -103,7 +103,7 @@ class Overworld:
 	def get_movement_data(self,target):
 		start = pygame.math.Vector2(self.nodes.sprites()[self.current_level].rect.center)
 		
-		if target == 'next': 
+		if target == 'next':
 			end = pygame.math.Vector2(self.nodes.sprites()[self.current_level + 1].rect.center)
 		else:
 			end = pygame.math.Vector2(self.nodes.sprites()[self.current_level - 1].rect.center)
