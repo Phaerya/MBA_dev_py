@@ -60,7 +60,7 @@ level_4 = {
 		'constraints':'../levels/2/level_2_constraints.csv',
 		'player': '../levels/2/level_2_player.csv',
 		'grass': '../levels/2/level_2_grass.csv',
-		'node_pos': (650,115),
+		'node_pos': (600,115),
 		'node_graphics': '../graphics/overworld/4',
 		'unlock': 5}
 level_5 = {
