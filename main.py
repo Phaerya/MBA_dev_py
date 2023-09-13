@@ -1,5 +1,6 @@
 import pygame
 import sys
+from classes.robot_npc import Robot
 from personnage import Personnage
 # Initialisation de Pygame
 pygame.init()
@@ -25,6 +26,14 @@ all_sprites = pygame.sprite.Group()
 all_sprites.add(personnage)
 
 # Boucle principale du jeu
+
+robot = Robot()
+all_sprites = pygame.sprite.Group([robot])
+
+
+robot = Robot()
+all_sprites = pygame.sprite.Group([robot])
+
 running = True
 while running:
     for event in pygame.event.get():
