@@ -1,6 +1,6 @@
 import pygame
 import sys
-
+from personnage import Personnage
 # Initialisation de Pygame
 pygame.init()
 
@@ -17,6 +17,13 @@ background_image = pygame.image.load("assets/img.png")  # Remplacez par le chemi
 # Redimensionnez l'image d'arrière-plan pour correspondre à la taille de la fenêtre
 background_image = pygame.transform.scale(background_image, (largeur, hauteur))
 
+# Création du personnage
+personnage = Personnage(largeur // 2, hauteur // 2)
+
+# Création du groupe de sprites
+all_sprites = pygame.sprite.Group()
+all_sprites.add(personnage)
+
 # Boucle principale du jeu
 running = True
 while running:
@@ -27,8 +34,11 @@ while running:
     # Dessine l'arrière-plan
     fenetre.blit(background_image, (0, 0))
 
-    # Dessinez ici les éléments du jeu
-    # ...
+    # Mettez à jour le groupe de sprites
+    all_sprites.update()
+
+    # Dessinez le groupe de sprites
+    all_sprites.draw(fenetre)
 
     # Met à jour l'affichage
     pygame.display.flip()
