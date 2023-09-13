@@ -3,7 +3,7 @@ import pygame
 class Personnage(pygame.sprite.Sprite):
     def __init__(self, largeur, hauteur):
         super().__init__()
-        self.image = pygame.image.load("assets/player.png")
+        self.image = pygame.image.load("assets/robot/Armature_Idle_00.png")
         self.rect = self.image.get_rect()
         self.rect.center = (largeur, hauteur)
         self.vitesse = 5
