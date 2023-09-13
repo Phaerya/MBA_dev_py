@@ -26,7 +26,11 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:  # Appui sur la touche "Échap"
+                running = False
 
+                
     # Dessine l'arrière-plan
     fenetre.blit(background_image, (0, 0))
 
