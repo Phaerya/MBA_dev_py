@@ -7,9 +7,6 @@ pygame.init()
 # Dimensions de la fenêtre
 largeur, hauteur = 1400, 800
 
-# Couleurs
-blanc = (255, 255, 255)
-
 # Création de la fenêtre
 fenetre = pygame.display.set_mode((largeur, hauteur))
 pygame.display.set_caption("Jeu Mario 2D du développeur")
