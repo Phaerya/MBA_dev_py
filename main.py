@@ -4,6 +4,20 @@ import sys
 # Initialisation de Pygame
 pygame.init()
 
+#Créer une classe de joueur
+
+class Player(pygame.sprite.Sprite):
+
+        def __init__(self):
+             super().__init__()
+             self.health = 100
+             self.max_health = 100
+             self.attack = 10
+             self.velocity = 5
+             self.image = pygame.image.load('assets/player.png/')
+             self.rect = self.image.get_rect()
+
+
 # Dimensions de la fenêtre
 largeur, hauteur = 1400, 800
 
