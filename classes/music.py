@@ -6,7 +6,6 @@ from pygame.mixer_music import stop as music_stop
 class GameMusic():
     
     def play(self, music_file):
-        music_init()
         music_load(music_file)
         music_play()
     

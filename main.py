@@ -33,8 +33,8 @@ music = GameMusic()
 all_sprites.add(robot)
 
 running = True
+music.play("./assets/music/intro.mp3")
 while running:
-    music.play("./assets/music/intro.mp3")
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
