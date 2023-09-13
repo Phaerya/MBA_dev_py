@@ -13,13 +13,8 @@ class Sky:
 		self.horizon = horizon
 		self.style = style
 
-
-
-
 	def draw(self,surface):
 		surface.blit(self.background, (0, 0))
-
-
 
 class Water:
 	def __init__(self,top,level_width):
