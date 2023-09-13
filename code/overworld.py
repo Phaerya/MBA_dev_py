@@ -49,14 +49,14 @@ class Overworld:
 
         # setup
         self.display_surface = surface
-        self.max_level = max_level
+        self.max_level = 5
         self.current_level = start_level
         self.create_level = create_level
 
         # movement logic
         self.moving = False
         self.move_direction = pygame.math.Vector2(0, 0)
-        self.speed = 8
+        self.speed = 12
 
         # sprites
         self.setup_nodes()
