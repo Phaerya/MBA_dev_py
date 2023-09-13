@@ -30,10 +30,6 @@ all_sprites.add(personnage)
 robot = Robot()
 all_sprites = pygame.sprite.Group([robot])
 
-
-robot = Robot()
-all_sprites = pygame.sprite.Group([robot])
-
 running = True
 while running:
     for event in pygame.event.get():
