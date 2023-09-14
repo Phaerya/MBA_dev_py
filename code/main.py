@@ -110,6 +110,5 @@ while True:
 			game.handle_menu_events(event)
 
 	game.run()
-
 	pygame.display.update()
 	clock.tick(60)

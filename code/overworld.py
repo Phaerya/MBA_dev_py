@@ -138,7 +138,5 @@ class Overworld:
         self.draw_paths(0)
         self.draw_paths(1)
 
-
-
         self.nodes.draw(self.display_surface)
         self.icon.draw(self.display_surface)
