@@ -14,8 +14,8 @@ class Game:
 		self.coins = 0
 		
 		# audio 
-		self.level_bg_music = pygame.mixer.Sound('../audio/level_music.wav')
-		self.overworld_bg_music = pygame.mixer.Sound('../audio/overworld_music.wav')
+		self.level_bg_music = pygame.mixer.Sound('../audio/stage.mp3')
+		self.overworld_bg_music = pygame.mixer.Sound('../audio/overworld2.mp3')
 
 		# overworld creation
 		self.overworld = Overworld(0,self.max_level,screen,self.create_level)
@@ -77,10 +77,6 @@ while True:
 			pygame.quit()
 			sys.exit()
 
-		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_v:
-				Level.toggle_platform("plateforme")
-	
 	screen.fill('grey')
 	game.run()
 

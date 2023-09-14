@@ -3,8 +3,7 @@ level_0 = {
 		'crates': '../levels/0/level_0_crates.csv',
 		'player': '../levels/0/level_0_player.csv',
 		'grass': '../levels/0/level_0_grass.csv',
-		'coins': '../levels/0/level_0_coins.csv',
-		'node_pos': (110,400),
+		'node_pos': (600,360),
 		'unlock': 1,
 		'node_graphics': '../graphics/overworld/0'}
 level_1 = {

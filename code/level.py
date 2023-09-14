@@ -59,9 +59,6 @@ class Level:
 		self.water = Water(screen_height - 20,level_width)
 		self.clouds = Clouds(400,level_width,30)
 
-		#plateforme qui disparait :
-		self.platform_enabled = True;
-
 	def create_tile_group(self,layout,type):
 		sprite_group = pygame.sprite.Group()
 
@@ -107,10 +104,6 @@ class Level:
 					sprite_group.add(sprite)
 
 		return sprite_group
-
-	def toggle_platform(self, code):
-		if code == "plateforme":
-			self.platform_enabled = not self.platform_enabled
 
 	def player_setup(self,layout,change_health):
 		for row_index, row in enumerate(layout):
