@@ -36,9 +36,10 @@ class Level:
 		# user interface 
 		self.change_coins = change_coins
 
-		#nb pièces
+		#nb clés
 		self.coins = 0
 		print(self.coins)
+
 		# dust 
 		self.dust_sprite = pygame.sprite.GroupSingle()
 		self.player_on_ground = False
@@ -49,6 +50,10 @@ class Level:
 		# terrain setup
 		terrain_layout = import_csv_layout(level_data['terrain'])
 		self.terrain_sprites = self.create_tile_group(terrain_layout,'terrain')
+
+		# platform setup
+		platform_layout = import_csv_layout(level_data['platform'])
+		self.platform_sprites = self.create_tile_group(platform_layout,'platform')
 
 		# crates 
 		crate_layout = import_csv_layout(level_data['crates'])
@@ -74,6 +79,11 @@ class Level:
 					y = row_index * tile_size
 
 					if type == 'terrain':
+						terrain_tile_list = import_cut_graphics('../graphics/terrain/terrain_tiles.png')
+						tile_surface = terrain_tile_list[int(val)]
+						sprite = StaticTile(tile_size,x,y,tile_surface)
+
+					if type == 'platform':
 						terrain_tile_list = import_cut_graphics('../graphics/terrain/terrain_tiles.png')
 						tile_surface = terrain_tile_list[int(val)]
 						sprite = StaticTile(tile_size,x,y,tile_surface)
@@ -131,7 +141,7 @@ class Level:
 	def horizontal_movement_collision(self):
 		player = self.player.sprite
 		player.collision_rect.x += player.direction.x * player.speed
-		collidable_sprites = self.terrain_sprites.sprites() + self.crate_sprites.sprites()
+		collidable_sprites = self.terrain_sprites.sprites() + self.crate_sprites.sprites() + self.platform_sprites.sprites()
 		for sprite in collidable_sprites:
 			if sprite.rect.colliderect(player.collision_rect):
 				if player.direction.x < 0:
@@ -146,7 +156,7 @@ class Level:
 	def vertical_movement_collision(self):
 		player = self.player.sprite
 		player.apply_gravity()
-		collidable_sprites = self.terrain_sprites.sprites() + self.crate_sprites.sprites()
+		collidable_sprites = self.terrain_sprites.sprites() + self.crate_sprites.sprites() + self.platform_sprites.sprites()
 
 		for sprite in collidable_sprites:
 			if sprite.rect.colliderect(player.collision_rect):
@@ -234,6 +244,10 @@ class Level:
 		# coins
 		self.coin_sprites.update(self.world_shift)
 		self.coin_sprites.draw(self.display_surface)
+
+		#
+		self.platform_sprites.update(self.world_shift)
+		self.platform_sprites.draw(self.display_surface)
 
 		# player sprites
 		self.player.update()
