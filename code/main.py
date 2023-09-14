@@ -28,6 +28,14 @@ class Game:
 		# user interface 
 		self.ui = UI(screen)
 
+		self.image_list = [
+			pygame.image.load('../graphics/main_menu/start_button.png'),
+			pygame.image.load('../graphics/main_menu/start_button_2.png'),
+		]
+
+		self.image_index = 0
+		self.image_change_time = pygame.time.get_ticks()
+
 		self.start_button = pygame.image.load('../graphics/main_menu/start_button.png')
 		self.start_button_rect = self.start_button.get_rect(center=(screen_width // 2, screen_height // 2))
 		self.in_menu = True  # Add a menu state
@@ -80,8 +88,17 @@ class Game:
 
 	def show_menu(self):
 		# Draw the Start button
-		screen.blit(self.start_button, self.start_button_rect)
+		current_time = pygame.time.get_ticks()
+		time_elapsed = current_time - self.image_change_time
 
+		# Changez l'image toutes les 1000 millisecondes (1 seconde)
+		if time_elapsed >= 500:
+			self.image_index = (self.image_index + 1) % len(self.image_list)
+			self.image_change_time = current_time
+
+		# Affichez l'image actuelle
+		current_image = self.image_list[self.image_index]
+		screen.blit(current_image, self.start_button_rect)
 	def handle_menu_events(self, event):
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_RETURN:
