@@ -100,7 +100,7 @@ class Overworld:
     def draw_paths(self, param):
 
         if self.max_level > 0 and param == 1:
-            points = [node['node_pos'] for index, node in enumerate(levels.values()) if index <= 2]
+            points = [node['node_pos'] for index, node in enumerate(levels.values()) if index <= 1]
             pygame.draw.lines(self.display_surface, '#FFFFFF', False, points, 6)
         else :
             points = [node['node_pos'] for index, node in enumerate(levels.values()) if index <= self.max_level]
@@ -115,7 +115,7 @@ class Overworld:
         keys = pygame.key.get_pressed()
 
         if not self.moving and self.allow_input:
-            if keys[pygame.K_RIGHT] and self.current_level < self.max_level:
+            if keys[pygame.K_RIGHT] and self.current_level < 1: #Modif valeur pour accéder aux autres mondes
                 self.move_direction = self.get_movement_data('next')
                 self.current_level += 1
                 self.moving = True
