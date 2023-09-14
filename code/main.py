@@ -8,14 +8,14 @@ class Game:
 	def __init__(self):
 
 		# game attributes
-		self.max_level = 2
+		self.max_level = 0		# Niveau de démarrage, 0 = lvl 1
 		self.max_health = 100
 		self.cur_health = 100
 		self.coins = 0
 		
 		# audio 
-		self.level_bg_music = pygame.mixer.Sound('../audio/level_music.wav')
-		self.overworld_bg_music = pygame.mixer.Sound('../audio/overworld_music.wav')
+		self.level_bg_music = pygame.mixer.Sound('../audio/stage.mp3')
+		self.overworld_bg_music = pygame.mixer.Sound('../audio/overworld2.mp3')
 
 		# overworld creation
 		self.overworld = Overworld(0,self.max_level,screen,self.create_level)
@@ -76,7 +76,7 @@ while True:
 		if event.type == pygame.QUIT:
 			pygame.quit()
 			sys.exit()
-	
+
 	screen.fill('grey')
 	game.run()
 
