@@ -1,7 +1,7 @@
 import pygame 
 from support import import_csv_layout, import_cut_graphics
 from settings import tile_size, screen_height, screen_width
-from tiles import Tile, StaticTile, Crate, Coin, Palm
+from tiles import Tile, StaticTile, Crate, Key, Palm
 from enemy import Enemy
 from decoration import Sky, Water, Clouds
 from player import Player
@@ -34,6 +34,9 @@ class Level:
 		# user interface 
 		self.change_coins = change_coins
 
+		#nb pièces
+		self.coins = 0
+		print(self.coins)
 		# dust 
 		self.dust_sprite = pygame.sprite.GroupSingle()
 		self.player_on_ground = False
@@ -82,8 +85,7 @@ class Level:
 						sprite = Crate(tile_size,x,y)
 
 					if type == 'coins':
-						if val == '0': sprite = Coin(tile_size,x,y,'../graphics/coins/gold',5)
-						if val == '1': sprite = Coin(tile_size,x,y,'../graphics/coins/silver',1)
+						if val == '0': sprite = Key(tile_size,x,y,1)
 
 					if type == 'fg palms':
 						if val == '0': sprite = Palm(tile_size,x,y,'../graphics/terrain/palm_small',38)
@@ -194,7 +196,8 @@ class Level:
 			
 	def check_win(self):
 		if pygame.sprite.spritecollide(self.player.sprite,self.goal,False):
-			self.create_overworld(self.current_level,self.new_max_level)
+			if self.coins >= 1:
+				self.create_overworld(self.current_level,self.new_max_level)
 
 	def check_coin_collisions(self):
 		collided_coins = pygame.sprite.spritecollide(self.player.sprite, self.coin_sprites, True)
@@ -202,6 +205,7 @@ class Level:
 			self.coin_sound.play()
 			for coin in collided_coins:
 				self.change_coins(coin.value)
+				self.coins += coin.value
 
 	def run(self):
 		# run the entire game / level 
