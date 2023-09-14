@@ -218,7 +218,6 @@ class Level:
 		
 		# sky 
 		self.sky.draw(self.display_surface)
-		self.clouds.draw(self.display_surface,self.world_shift)
 
 		# dust particles 
 		self.dust_sprite.update(self.world_shift)
