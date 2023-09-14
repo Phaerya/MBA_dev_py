@@ -4,6 +4,7 @@ level_0 = {
 		'crates': '../levels/0/level_0_crates.csv',
 		'player': '../levels/0/level_0_player.csv',
 		'grass': '../levels/0/level_0_grass.csv',
+		'platform': '../levels/0/level_0_platform.csv',
 		'node_pos': (600,360),
 		'unlock': 1,
 		'node_graphics': '../graphics/overworld/0'}
