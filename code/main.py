@@ -32,14 +32,15 @@ class Game:
 			pygame.image.load('../graphics/main_menu/start_button.png'),
 			pygame.image.load('../graphics/main_menu/start_button_2.png'),
 		]
-
 		self.image_index = 0
 		self.image_change_time = pygame.time.get_ticks()
 
+		screen.blit(background_image, (0, 0))
+
 		self.start_button = pygame.image.load('../graphics/main_menu/start_button.png')
 		self.start_button_rect = self.start_button.get_rect(center=(screen_width // 2, screen_height // 2))
-		self.in_menu = True  # Add a menu state
 
+		self.in_menu = True  # Add a menu state
 
 	def create_level(self,current_level):
 		self.reset_coins()
@@ -109,6 +110,9 @@ class Game:
 # Pygame setup
 pygame.init()
 screen = pygame.display.set_mode((screen_width,screen_height))
+background_image = pygame.image.load('../graphics/main_menu/start_screen.png')
+background_image = pygame.transform.scale(background_image, (screen_width, screen_height))
+
 clock = pygame.time.Clock()
 game = Game()
 
@@ -121,8 +125,6 @@ while True:
 		if game.in_menu:
 			game.handle_menu_events(event)
 
-	screen.fill('grey')
 	game.run()
-
 	pygame.display.update()
 	clock.tick(60)
