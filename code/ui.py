@@ -13,7 +13,7 @@ class UI:
 		self.bar_height = 4
 
 		# coins 
-		self.coin = pygame.image.load('../graphics/ui/coin.png').convert_alpha()
+		self.coin = pygame.image.load('../graphics/ui/key.png').convert_alpha()
 		self.coin_rect = self.coin.get_rect(topleft = (50,61))
 		self.font = pygame.font.Font('../graphics/ui/ARCADEPI.ttf',30)
 
@@ -30,6 +30,6 @@ class UI:
 
 	def show_coins(self,amount):
 		self.display_surface.blit(self.coin,self.coin_rect)
-		coin_amount_surf = self.font.render(str(amount),False,'#33323d')
+		coin_amount_surf = self.font.render(str(amount),False,'#ffffff')
 		coin_amount_rect = coin_amount_surf.get_rect(midleft = (self.coin_rect.right + 4,self.coin_rect.centery))
 		self.display_surface.blit(coin_amount_surf,coin_amount_rect)

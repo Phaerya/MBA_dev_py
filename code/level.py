@@ -1,7 +1,7 @@
 import pygame 
 from support import import_csv_layout, import_cut_graphics
 from settings import tile_size, screen_height, screen_width
-from tiles import Tile, StaticTile, Crate, Coin, Palm
+from tiles import Tile, StaticTile, Crate, Key, Palm
 from enemy import Enemy
 from decoration import Sky, Water, Clouds
 from player import Player
@@ -19,7 +19,9 @@ class Level:
 
 		# audio 
 		self.coin_sound = pygame.mixer.Sound('../audio/effects/coin.wav')
+		self.coin_sound.set_volume(0.08)
 		self.stomp_sound = pygame.mixer.Sound('../audio/effects/stomp.wav')
+		self.stomp_sound.set_volume(0.08)
 
 		# overworld connection 
 		self.create_overworld = create_overworld
@@ -36,6 +38,9 @@ class Level:
 		# user interface 
 		self.change_coins = change_coins
 
+		#nb pièces
+		self.coins = 0
+		print(self.coins)
 		# dust 
 		self.dust_sprite = pygame.sprite.GroupSingle()
 		self.player_on_ground = False
@@ -86,8 +91,7 @@ class Level:
 						sprite = Crate(tile_size,x,y)
 
 					if type == 'coins':
-						if val == '0': sprite = Coin(tile_size,x,y,'../graphics/coins/gold',5)
-						if val == '1': sprite = Coin(tile_size,x,y,'../graphics/coins/silver',1)
+						if val == '0': sprite = Key(tile_size,x,y,1)
 
 					if type == 'fg palms':
 						if val == '0': sprite = Palm(tile_size,x,y,'../graphics/terrain/palm_small',38)
@@ -115,7 +119,7 @@ class Level:
 					sprite = Player((x,y),self.display_surface,self.create_jump_particles,change_health)
 					self.player.add(sprite)
 				if val == '1':
-					hat_surface = pygame.image.load('../graphics/character/hat.png').convert_alpha()
+					hat_surface = pygame.image.load('../graphics/character/teleporter.png').convert_alpha()
 					sprite = StaticTile(tile_size,x,y,hat_surface)
 					self.goal.add(sprite)
 
@@ -198,7 +202,8 @@ class Level:
 			
 	def check_win(self):
 		if pygame.sprite.spritecollide(self.player.sprite,self.goal,False):
-			self.create_overworld(self.current_level,self.new_max_level)
+			if self.coins >= 1:
+				self.create_overworld(self.current_level,self.new_max_level)
 
 	def check_coin_collisions(self):
 		collided_coins = pygame.sprite.spritecollide(self.player.sprite, self.coin_sprites, True)
@@ -206,6 +211,7 @@ class Level:
 			self.coin_sound.play()
 			for coin in collided_coins:
 				self.change_coins(coin.value)
+				self.coins += coin.value
 
 	def run(self):
 		# run the entire game / level 
