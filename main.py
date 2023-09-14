@@ -1,6 +1,7 @@
 import pygame
 from game import Game
 from bubble import Bubble
+from arrow import Arrow
 import sys
 
 # Initialisation de Pygame
@@ -31,8 +32,9 @@ shake_duration = 500  # 500 ms, soit .5 secondes
 # Création des instance de class
 game = Game(largeur, hauteur)
 bubble = Bubble()
+arrow = Arrow()
 
-message = "Bonjour, je suis votre robotds<fdddddddddddddddddddddddd<br>dddddddddddddddddddddddddddddddd!"
+message = "Bonjour, je suis votre robotd"
 
 # Variable pour suivre si la bulle a été affichée
 bubble_displayed = False
@@ -40,6 +42,7 @@ bubble_displayed = False
 # Boucle principale du jeu
 running = True
 while running:
+    fenetre.fill(blanc)
 
     # Obtenez le temps actuel
     current_time = pygame.time.get_ticks()
@@ -59,7 +62,8 @@ while running:
     
     if bubble_displayed:
         bubble.draw(fenetre, message, game.robot.rect.x + game.robot.rect.width / 2, game.robot.rect.y)
-    
+        arrow.draw(fenetre, game.robot.rect.x + game.robot.rect.width / 2 + 20, game.robot.rect.y + 10)
+
     # Met à jour l'affichage
     pygame.display.flip()
 
@@ -67,8 +71,11 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:  # Appui sur la touche "Échap"
+            if event.key == pygame.K_ESCAPE:
                 running = False
+        elif arrow.handle_event(event):
+            bubble_displayed = False
+            print("bubble_displayed réglé sur False")
 
 # Quitte Pygame
 pygame.quit()
