@@ -100,6 +100,7 @@ while True:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_0:
                 modifier_valeurs_csv(chemin_fichier, ancienne_valeur, nouvelle_valeur)
+                game.create_level(0)
 
     screen.fill('grey')
     game.run()
