@@ -37,6 +37,13 @@ class Game:
 
 		screen.blit(background_image, (0, 0))
 
+		self.title = pygame.image.load('../graphics/main_menu/title.png')
+		self.title_rect = self.title.get_rect(center=(screen_width // 2, screen_height // 4.5))
+
+		self.show_title = True
+		self.title_display_duration = 2000
+		self.title_display_end_time = pygame.time.get_ticks() + self.title_display_duration
+
 		self.start_button = pygame.image.load('../graphics/main_menu/start_button.png')
 		self.start_button_rect = self.start_button.get_rect(center=(screen_width // 2, screen_height // 2))
 
@@ -88,18 +95,25 @@ class Game:
 			self.check_game_over()
 
 	def show_menu(self):
-		# Draw the Start button
 		current_time = pygame.time.get_ticks()
-		time_elapsed = current_time - self.image_change_time
 
-		# Changez l'image toutes les 1000 millisecondes (1 seconde)
-		if time_elapsed >= 500:
-			self.image_index = (self.image_index + 1) % len(self.image_list)
-			self.image_change_time = current_time
+		if self.show_title:
+			# Affichez le titre
+			screen.blit(self.title, self.title_rect)
 
-		# Affichez l'image actuelle
-		current_image = self.image_list[self.image_index]
-		screen.blit(current_image, self.start_button_rect)
+			# Vérifiez si le temps d'affichage du titre est écoulé
+			if current_time >= self.title_display_end_time:
+				self.show_title = False
+		else:
+			time_elapsed = current_time - self.image_change_time
+
+			if time_elapsed >= 500:
+				self.image_index = (self.image_index + 1) % len(self.image_list)
+				self.image_change_time = current_time
+
+			current_image = self.image_list[self.image_index]
+			screen.blit(current_image, self.start_button_rect)
+
 	def handle_menu_events(self, event):
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_RETURN:
