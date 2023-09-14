@@ -7,9 +7,11 @@ from decoration import Sky, Water, Clouds
 from player import Player
 from particles import ParticleEffect
 from game_data import levels
+from bulle import Bulle
 
 class Level:
 	def __init__(self,current_level,surface,create_overworld,change_coins,change_health):
+		print(current_level)
 		# general setup
 		self.display_surface = surface
 		self.world_shift = 0
@@ -68,6 +70,8 @@ class Level:
 		level_width = len(terrain_layout[0]) * tile_size
 		self.water = Water(screen_height - 20,level_width)
 		self.clouds = Clouds(400,level_width,30)
+
+		self.bulle = Bulle(self.display_surface, screen_width, screen_height)
 
 	def create_tile_group(self,layout,type):
 		sprite_group = pygame.sprite.Group()
@@ -269,3 +273,7 @@ class Level:
 
 		# water 
 		self.water.draw(self.display_surface,self.world_shift)
+
+		if self.current_level == 1:
+			self.bulle.rect.x += self.world_shift  # Ajustez la position x de l'image
+			self.bulle.draw()
