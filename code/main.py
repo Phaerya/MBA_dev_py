@@ -3,6 +3,7 @@ from settings import *
 from level import Level
 from overworld import Overworld
 from ui import UI
+import csv
 
 class Game:
 	def __init__(self):
@@ -135,6 +136,17 @@ while True:
 		if event.type == pygame.QUIT:
 			pygame.quit()
 			sys.exit()
+		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_e:
+                # Specify the row and column indices in the CSV where you want to replace a value
+				row_index = 8
+				column_index = 8
+
+                # Specify the new value you want to set in the CSV
+				new_value = 1  # Replace with the value you want
+
+                # Update the CSV data with the new value
+				map_data[row_index][column_index] = new_value
 
 		if game.in_menu:
 			game.handle_menu_events(event)
