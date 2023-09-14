@@ -15,15 +15,22 @@ class Game:
 		
 		# audio 
 		self.level_bg_music = pygame.mixer.Sound('../audio/stage.mp3')
+		self.menu_bg_music = pygame.mixer.Sound('../audio/intro2.mp3')
+		self.menu_bg_music.play(loops = -1)
 		self.overworld_bg_music = pygame.mixer.Sound('../audio/overworld2.mp3')
+		self.overworld_bg_music.set_volume(0.4)
 
 		# overworld creation
 		self.overworld = Overworld(0,self.max_level,screen,self.create_level)
 		self.status = 'overworld'
-		self.overworld_bg_music.play(loops = -1)
+		# self.overworld_bg_music.play(loops = -1)
 
 		# user interface 
 		self.ui = UI(screen)
+
+		self.start_button = pygame.image.load('../graphics/main_menu/start_button.png')
+		self.start_button_rect = self.start_button.get_rect(center=(screen_width // 2, screen_height // 2))
+		self.in_menu = True  # Add a menu state
 
 
 	def create_level(self,current_level):
@@ -57,13 +64,26 @@ class Game:
 			self.overworld_bg_music.play(loops = -1)
 
 	def run(self):
-		if self.status == 'overworld':
+		if self.in_menu:
+			self.show_menu()
+		elif self.status == 'overworld':
 			self.overworld.run()
 		else:
 			self.level.run()
-			self.ui.show_health(self.cur_health,self.max_health)
+			self.ui.show_health(self.cur_health, self.max_health)
 			self.ui.show_coins(self.coins)
 			self.check_game_over()
+
+	def show_menu(self):
+		# Draw the Start button
+		screen.blit(self.start_button, self.start_button_rect)
+
+	def handle_menu_events(self, event):
+		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_RETURN:
+				self.in_menu = False
+				self.overworld_bg_music.play(loops=-1)
+				self.menu_bg_music.stop()
 
 # Pygame setup
 pygame.init()
@@ -76,6 +96,9 @@ while True:
 		if event.type == pygame.QUIT:
 			pygame.quit()
 			sys.exit()
+
+		if game.in_menu:
+			game.handle_menu_events(event)
 
 	screen.fill('grey')
 	game.run()
