@@ -68,9 +68,6 @@ class Level:
 					x = col_index * tile_size
 					y = row_index * tile_size
 
-					if not self.platform_enabled and val in ['12', '13', '14']:
-						val = '0'
-
 					if type == 'terrain':
 						terrain_tile_list = import_cut_graphics('../graphics/terrain/terrain_tiles.png')
 						tile_surface = terrain_tile_list[int(val)]
