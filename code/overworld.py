@@ -44,7 +44,7 @@ class Overworld:
 
         # setup
         self.display_surface = surface
-        self.max_level = 2
+        self.max_level = 5
         self.current_level = start_level
         self.create_level = create_level
 
@@ -73,10 +73,14 @@ class Overworld:
                 node_sprite = Node(node_data['node_pos'], 'locked', self.speed, node_data['node_graphics'])
             self.nodes.add(node_sprite)
 
-    def draw_paths(self):
-        if self.max_level > 0:
-            points = [node['node_pos'] for index, node in enumerate(levels.values()) if index <= self.max_level]
+    def draw_paths(self, param ):
+
+        if self.max_level > 0 and param == 1:
+            points = [node['node_pos'] for index, node in enumerate(levels.values()) if index <= 2]
             pygame.draw.lines(self.display_surface, '#FFFFFF', False, points, 6)
+        else :
+            points = [node['node_pos'] for index, node in enumerate(levels.values()) if index <= self.max_level]
+            pygame.draw.lines(self.display_surface, '#000000', False, points, 6)
 
     def setup_icon(self):
         self.icon = pygame.sprite.GroupSingle()
@@ -130,6 +134,11 @@ class Overworld:
         self.nodes.update()
 
         self.sky.draw(self.display_surface)
-        self.draw_paths()
+
+        self.draw_paths(0)
+        self.draw_paths(1)
+
+
+
         self.nodes.draw(self.display_surface)
         self.icon.draw(self.display_surface)
