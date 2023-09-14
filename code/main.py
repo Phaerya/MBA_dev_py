@@ -8,7 +8,7 @@ class Game:
 	def __init__(self):
 
 		# game attributes
-		self.max_level = 2
+		self.max_level = 0		# Niveau de démarrage, 0 = lvl 1
 		self.max_health = 100
 		self.cur_health = 100
 		self.coins = 0
@@ -76,6 +76,10 @@ while True:
 		if event.type == pygame.QUIT:
 			pygame.quit()
 			sys.exit()
+
+		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_v:
+				Level.toggle_platform("plateforme")
 	
 	screen.fill('grey')
 	game.run()
