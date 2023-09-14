@@ -115,10 +115,6 @@ class Level:
 					sprite = StaticTile(tile_size,x,y,hat_surface)
 					self.goal.add(sprite)
 
-	def enemy_collision_reverse(self):
-		for enemy in self.enemy_sprites.sprites():
-			if pygame.sprite.spritecollide(enemy,self.constraint_sprites,False):
-				enemy.reverse()
 
 	def create_jump_particles(self,pos):
 		if self.player.sprite.facing_right:
