@@ -16,7 +16,7 @@ level_1 = {
 		'constraints':'../levels/1/level_1_constraints.csv',
 		'player': '../levels/1/level_1_player.csv',
 		'grass': '../levels/1/level_1_grass.csv',
-		'node_pos': (300,220),
+		'node_pos': (318,623),
 		'node_graphics': '../graphics/overworld/1',
 		'unlock': 2}
 level_2 = {
@@ -29,7 +29,7 @@ level_2 = {
 		'constraints':'../levels/2/level_2_constraints.csv',
 		'player': '../levels/2/level_2_player.csv',
 		'grass': '../levels/2/level_2_grass.csv',
-		'node_pos': (480,610),
+		'node_pos': (892,623),
 		'node_graphics': '../graphics/overworld/2',
 		'unlock': 3}
 level_3 = {
@@ -42,7 +42,7 @@ level_3 = {
 		'constraints':'../levels/2/level_2_constraints.csv',
 		'player': '../levels/2/level_2_player.csv',
 		'grass': '../levels/2/level_2_grass.csv',
-		'node_pos': (610,350),
+		'node_pos': (1070,309),
 		'node_graphics': '../graphics/overworld/3',
 		'unlock': 4}
 level_4 = {
@@ -55,7 +55,7 @@ level_4 = {
 		'constraints':'../levels/2/level_2_constraints.csv',
 		'player': '../levels/2/level_2_player.csv',
 		'grass': '../levels/2/level_2_grass.csv',
-		'node_pos': (880,210),
+		'node_pos': (600,115),
 		'node_graphics': '../graphics/overworld/4',
 		'unlock': 5}
 level_5 = {
@@ -68,7 +68,7 @@ level_5 = {
 		'constraints':'../levels/2/level_2_constraints.csv',
 		'player': '../levels/2/level_2_player.csv',
 		'grass': '../levels/2/level_2_grass.csv',
-		'node_pos': (1050,400),
+		'node_pos': (140,309),
 		'node_graphics':'../graphics/overworld/5',
 		'unlock': 5}
 
