@@ -1,4 +1,5 @@
 import pygame
+import math
 from game_data import levels
 from support import import_folder
 from decoration import Sky
@@ -63,6 +64,8 @@ class Overworld:
         self.allow_input = False
         self.timer_length = 300
 
+
+
     def setup_nodes(self):
         self.nodes = pygame.sprite.Group()
 
@@ -73,14 +76,35 @@ class Overworld:
                 node_sprite = Node(node_data['node_pos'], 'locked', self.speed, node_data['node_graphics'])
             self.nodes.add(node_sprite)
 
-    def draw_paths(self, param ):
+    def draw_dashed_lines(self, surface, color, closed, points, width, dash_length, gap_length):
+        for i in range(1, len(points)):
+            start_point = points[i - 1]
+            end_point = points[i]
+            dx, dy = end_point[0] - start_point[0], end_point[1] - start_point[1]
+            distance = max(abs(dx), abs(dy))
+            if distance == 0:
+                continue
+
+            delta_x = dx / distance
+            delta_y = dy / distance
+            length = 0
+
+            while length < distance:
+                x1 = int(start_point[0] + length * delta_x)
+                y1 = int(start_point[1] + length * delta_y)
+                x2 = int(start_point[0] + min(length + dash_length, distance) * delta_x)
+                y2 = int(start_point[1] + min(length + dash_length, distance) * delta_y)
+                pygame.draw.line(surface, color, (x1, y1), (x2, y2), width)
+                length += dash_length + gap_length
+
+    def draw_paths(self, param):
 
         if self.max_level > 0 and param == 1:
             points = [node['node_pos'] for index, node in enumerate(levels.values()) if index <= 2]
             pygame.draw.lines(self.display_surface, '#FFFFFF', False, points, 6)
         else :
             points = [node['node_pos'] for index, node in enumerate(levels.values()) if index <= self.max_level]
-            pygame.draw.lines(self.display_surface, '#000000', False, points, 6)
+            self.draw_dashed_lines(self.display_surface, (255, 255, 255), False, points, 6, 10, 10)
 
     def setup_icon(self):
         self.icon = pygame.sprite.GroupSingle()
