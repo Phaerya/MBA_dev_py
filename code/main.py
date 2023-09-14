@@ -15,13 +15,15 @@ class Game:
 		
 		# audio 
 		self.level_bg_music = pygame.mixer.Sound('../audio/stage.mp3')
+		self.menu_bg_music = pygame.mixer.Sound('../audio/intro2.mp3')
+		self.menu_bg_music.play(loops = -1)
 		self.overworld_bg_music = pygame.mixer.Sound('../audio/overworld2.mp3')
 		self.overworld_bg_music.set_volume(0.4)
 
 		# overworld creation
 		self.overworld = Overworld(0,self.max_level,screen,self.create_level)
 		self.status = 'overworld'
-		self.overworld_bg_music.play(loops = -1)
+		# self.overworld_bg_music.play(loops = -1)
 
 		# user interface 
 		self.ui = UI(screen)
@@ -81,7 +83,7 @@ class Game:
 			if event.key == pygame.K_RETURN:
 				self.in_menu = False
 				self.overworld_bg_music.play(loops=-1)
-				self.level_bg_music.stop()
+				self.menu_bg_music.stop()
 
 # Pygame setup
 pygame.init()
