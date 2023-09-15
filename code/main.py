@@ -4,6 +4,8 @@ from level import Level
 from overworld import Overworld
 from ui import UI
 import csv
+from game_data import levels
+import shutil
 
 class Game:
     def __init__(self):
@@ -13,7 +15,7 @@ class Game:
         self.max_health = 100
         self.cur_health = 100
         self.coins = 0
-        
+
         # audio 
         self.level_bg_music = pygame.mixer.Sound('../audio/stage.mp3')
         self.overworld_bg_music = pygame.mixer.Sound('../audio/overworld2.mp3')
@@ -22,15 +24,45 @@ class Game:
         self.overworld = Overworld(0,self.max_level,screen,self.create_level)
         self.status = 'overworld'
         self.overworld_bg_music.play(loops = -1)
-
+        self.current_level = None
         # user interface 
         self.ui = UI(screen)
 
-    def create_level(self,current_level):
-        self.level = Level(current_level,screen,self.create_overworld,self.change_coins,self.change_health)
+    # def create_level(self, current_level):
+    #     level_data = levels[current_level]
+    #     csv_file_path = level_data['terrain']
+    #     self.level = Level(current_level, screen, self.create_overworld, self.change_coins, self.change_health, csv_file_path, level_data)
+    #     self.status = 'level'
+    #     self.overworld_bg_music.stop()
+    #     self.level_bg_music.play(loops=-1)
+
+
+    def create_level(self, current_level):
+        level_data = levels[current_level]
+        csv_file_path = level_data['terrain']
+        self.current_level = current_level
+
+        # Retrieve the camera position from level data
+        camera_x = level_data.get('camera_x', 0)
+        camera_y = level_data.get('camera_y', 0)
+
+        self.level = Level(
+            current_level,
+            screen,
+            self.create_overworld,
+            self.change_coins,
+            self.change_health,
+            csv_file_path,
+            level_data,
+            camera_x,  # Pass the retrieved camera position
+            camera_y,
+        )
+
         self.status = 'level'
         self.overworld_bg_music.stop()
-        self.level_bg_music.play(loops = -1)
+        self.level_bg_music.play(loops=-1)
+
+
 
     def create_overworld(self,current_level,new_max_level):
         if new_max_level > self.max_level:
@@ -60,8 +92,11 @@ class Game:
         if self.status == 'overworld':
             self.overworld.run()
         else:
+            # Store the current camera position
+            self.camera_x, self.camera_y = self.level.get_camera_position()
+
             self.level.run()
-            self.ui.show_health(self.cur_health,self.max_health)
+            self.ui.show_health(self.cur_health, self.max_health)
             self.ui.show_coins(self.coins)
             self.check_game_over()
 
@@ -71,10 +106,14 @@ ancienne_valeur = -1
 nouvelle_valeur = 13
 
 def modifier_valeurs_csv(chemin_fichier, ancienne_valeur, nouvelle_valeur):
+    
     with open(chemin_fichier, 'r') as fichier_csv:
         lecteur_csv = csv.reader(fichier_csv)
         lignes = list(lecteur_csv)
     x=0
+
+    # with open(chemin_fichier, 'rw+') as new_fichier_csv:
+
     for ligne in lignes:
         for i in range(len(ligne)):
             x+=1
@@ -98,7 +137,7 @@ while True:
             pygame.quit()
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_0:
+            if event.key == pygame.K_r:
                 modifier_valeurs_csv(chemin_fichier, ancienne_valeur, nouvelle_valeur)
 
     screen.fill('grey')

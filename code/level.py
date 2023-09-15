@@ -1,3 +1,4 @@
+import os
 import pygame 
 from support import import_csv_layout, import_cut_graphics
 from settings import tile_size, screen_height, screen_width
@@ -9,11 +10,15 @@ from particles import ParticleEffect
 from game_data import levels
 
 class Level:
-	def __init__(self,current_level,surface,create_overworld,change_coins,change_health):
+	def __init__(self, current_level, surface, create_overworld, change_coins, change_health, csv_file_path, level_data, camera_x, camera_y):
+        # Constructor code here
 		# general setup
 		self.display_surface = surface
 		self.world_shift = 0
 		self.current_x = None
+		self.level_data = level_data
+		self.camera_x = camera_x  # Store camera position
+		self.camera_y = camera_y
 
 		# audio 
 		self.coin_sound = pygame.mixer.Sound('../audio/effects/coin.wav')
@@ -58,6 +63,9 @@ class Level:
 		level_width = len(terrain_layout[0]) * tile_size
 		self.water = Water(screen_height - 20,level_width)
 		self.clouds = Clouds(400,level_width,30)
+
+		self.csv_file_path = csv_file_path
+		self.last_csv_modification_time = 0
 
 	def create_tile_group(self,layout,type):
 		sprite_group = pygame.sprite.Group()
@@ -114,6 +122,27 @@ class Level:
 					hat_surface = pygame.image.load('../graphics/character/hat.png').convert_alpha()
 					sprite = StaticTile(tile_size,x,y,hat_surface)
 					self.goal.add(sprite)
+
+	def check_csv_modification(self):
+		current_modification_time = os.path.getmtime(self.csv_file_path)
+		if current_modification_time != self.last_csv_modification_time:
+			self.last_csv_modification_time = current_modification_time
+			self.reload_level()
+	
+	def get_camera_position(self):
+		return self.camera_x, self.camera_y
+
+	def reload_level(self):
+		# Store the current camera position
+		self.level_data['camera_x'] = self.camera_x
+		self.level_data['camera_y'] = self.camera_y
+
+		# Load and set up the level again here.
+		# You'll need to recreate tiles, sprites, and any other level-specific data.
+		# For example:
+		new_terrain_layout = import_csv_layout(self.level_data['terrain'])
+		self.terrain_sprites = self.create_tile_group(new_terrain_layout, 'terrain')
+
 
 	def enemy_collision_reverse(self):
 		for enemy in self.enemy_sprites.sprites():
@@ -253,3 +282,4 @@ class Level:
 
 		# water 
 		self.water.draw(self.display_surface,self.world_shift)
+		self.check_csv_modification()
