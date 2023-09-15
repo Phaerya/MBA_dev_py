@@ -36,17 +36,31 @@ class Game:
 		self.image_index = 0
 		self.image_change_time = pygame.time.get_ticks()
 
+		self.title_list = [
+			pygame.image.load('../graphics/main_menu/title_1.png'),
+			pygame.image.load('../graphics/main_menu/title_2.png'),
+			pygame.image.load('../graphics/main_menu/title_3.png'),
+			pygame.image.load('../graphics/main_menu/title_4.png'),
+			pygame.image.load('../graphics/main_menu/title_5.png'),
+			pygame.image.load('../graphics/main_menu/title_6.png'),
+			pygame.image.load('../graphics/main_menu/title_7.png'),
+			pygame.image.load('../graphics/main_menu/title_8.png'),
+			pygame.image.load('../graphics/main_menu/title_9.png'),
+			pygame.image.load('../graphics/main_menu/title_10.png'),
+			pygame.image.load('../graphics/main_menu/title_11.png'),
+			pygame.image.load('../graphics/main_menu/title_12.png'),
+			pygame.image.load('../graphics/main_menu/title_13.png'),
+		]
+		self.title_index = 0
+		self.title_change_time = pygame.time.get_ticks()
+
 		screen.blit(background_image, (0, 0))
 
-		self.title = pygame.image.load('../graphics/main_menu/title.png')
-		self.title_rect = self.title.get_rect(center=(screen_width // 2, screen_height // 4.5))
-
-		self.show_title = True
-		self.title_display_duration = 2000
-		self.title_display_end_time = pygame.time.get_ticks() + self.title_display_duration
+		self.title = pygame.image.load('../graphics/main_menu/title_1.png')
+		self.title_rect = self.title.get_rect(center=(screen_width // 2, screen_height // 2))
 
 		self.start_button = pygame.image.load('../graphics/main_menu/start_button.png')
-		self.start_button_rect = self.start_button.get_rect(center=(screen_width // 2, screen_height // 2))
+		self.start_button_rect = self.start_button.get_rect(center=(screen_width // 2, screen_height // 1.8))
 
 		self.in_menu = True  # Add a menu state
 
@@ -98,22 +112,24 @@ class Game:
 	def show_menu(self):
 		current_time = pygame.time.get_ticks()
 
-		if self.show_title:
-			# Affichez le titre
-			screen.blit(self.title, self.title_rect)
+		# Check if 500ms have passed since the last image change for the start_button
+		time_elapsed_start_button = current_time - self.image_change_time
+		if time_elapsed_start_button >= 500:
+			self.image_index = (self.image_index + 1) % len(self.image_list)
+			self.image_change_time = current_time
 
-			# Vérifiez si le temps d'affichage du titre est écoulé
-			if current_time >= self.title_display_end_time:
-				self.show_title = False
-		else:
-			time_elapsed = current_time - self.image_change_time
+		# Check if 200ms have passed since the last title change
+		time_elapsed_title = current_time - self.title_change_time
+		if time_elapsed_title >= 200:
+			self.title_index = (self.title_index + 1) % len(self.title_list)
+			self.title_change_time = current_time
 
-			if time_elapsed >= 500:
-				self.image_index = (self.image_index + 1) % len(self.image_list)
-				self.image_change_time = current_time
+		current_image = self.image_list[self.image_index]
+		screen.blit(current_image, self.start_button_rect)
 
-			current_image = self.image_list[self.image_index]
-			screen.blit(current_image, self.start_button_rect)
+		# Display the current title image
+		current_title = self.title_list[self.title_index]
+		screen.blit(current_title, self.title_rect)
 
 	def handle_menu_events(self, event):
 		if event.type == pygame.KEYDOWN:
@@ -137,6 +153,7 @@ while True:
 		if event.type == pygame.QUIT:
 			pygame.quit()
 			sys.exit()
+
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_e:
                 # Specify the row and column indices in the CSV where you want to replace a value
