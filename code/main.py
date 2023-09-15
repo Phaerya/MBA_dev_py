@@ -3,6 +3,7 @@ from settings import *
 from level import Level
 from overworld import Overworld
 from ui import UI
+import csv
 
 class Game:
 	def __init__(self):
@@ -28,11 +29,26 @@ class Game:
 		# user interface 
 		self.ui = UI(screen)
 
+		self.image_list = [
+			pygame.image.load('../graphics/main_menu/start_button.png'),
+			pygame.image.load('../graphics/main_menu/start_button_2.png'),
+		]
+		self.image_index = 0
+		self.image_change_time = pygame.time.get_ticks()
+
 		screen.blit(background_image, (0, 0))
+
+		self.title = pygame.image.load('../graphics/main_menu/title.png')
+		self.title_rect = self.title.get_rect(center=(screen_width // 2, screen_height // 4.5))
+
+		self.show_title = True
+		self.title_display_duration = 2000
+		self.title_display_end_time = pygame.time.get_ticks() + self.title_display_duration
+
 		self.start_button = pygame.image.load('../graphics/main_menu/start_button.png')
 		self.start_button_rect = self.start_button.get_rect(center=(screen_width // 2, screen_height // 2))
-		self.in_menu = True  # Add a menu state
 
+		self.in_menu = True  # Add a menu state
 
 	def create_level(self,current_level):
 		self.reset_coins()
@@ -80,8 +96,24 @@ class Game:
 			self.check_game_over()
 
 	def show_menu(self):
-		# Draw the Start button
-		screen.blit(self.start_button, self.start_button_rect)
+		current_time = pygame.time.get_ticks()
+
+		if self.show_title:
+			# Affichez le titre
+			screen.blit(self.title, self.title_rect)
+
+			# Vérifiez si le temps d'affichage du titre est écoulé
+			if current_time >= self.title_display_end_time:
+				self.show_title = False
+		else:
+			time_elapsed = current_time - self.image_change_time
+
+			if time_elapsed >= 500:
+				self.image_index = (self.image_index + 1) % len(self.image_list)
+				self.image_change_time = current_time
+
+			current_image = self.image_list[self.image_index]
+			screen.blit(current_image, self.start_button_rect)
 
 	def handle_menu_events(self, event):
 		if event.type == pygame.KEYDOWN:
@@ -93,7 +125,6 @@ class Game:
 # Pygame setup
 pygame.init()
 screen = pygame.display.set_mode((screen_width,screen_height))
-
 background_image = pygame.image.load('../graphics/main_menu/start_screen.png')
 background_image = pygame.transform.scale(background_image, (screen_width, screen_height))
 
@@ -106,6 +137,17 @@ while True:
 		if event.type == pygame.QUIT:
 			pygame.quit()
 			sys.exit()
+		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_e:
+                # Specify the row and column indices in the CSV where you want to replace a value
+				row_index = 8
+				column_index = 8
+
+                # Specify the new value you want to set in the CSV
+				new_value = 1  # Replace with the value you want
+
+                # Update the CSV data with the new value
+				map_data[row_index][column_index] = new_value
 
 		if game.in_menu:
 			game.handle_menu_events(event)
