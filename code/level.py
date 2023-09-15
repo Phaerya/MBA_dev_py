@@ -3,15 +3,20 @@ import shutil
 import pygame 
 from support import import_csv_layout, import_cut_graphics
 from settings import tile_size, screen_height, screen_width
-from tiles import Tile, StaticTile, Crate, Coin, Palm
+from tiles import Tile, StaticTile, Crate, Key, Palm
 from enemy import Enemy
-from decoration import Sky, Water, Clouds
+from decoration import Sky, Clouds
 from player import Player
 from particles import ParticleEffect
 from game_data import levels
+from bulle import Bulle
+from bullelvl0 import Bullelvl0
+from bullelvl01 import Bullelvl01
+
 
 class Level:
 	def __init__(self, current_level, surface, create_overworld, change_coins, change_health, csv_file_path, level_data, camera_x, camera_y):
+		print(current_level)
         # Constructor code here
 		# general setup
 		self.display_surface = surface
@@ -27,7 +32,9 @@ class Level:
 
 		# audio 
 		self.coin_sound = pygame.mixer.Sound('../audio/effects/coin.wav')
+		self.coin_sound.set_volume(0.08)
 		self.stomp_sound = pygame.mixer.Sound('../audio/effects/stomp.wav')
+		self.stomp_sound.set_volume(0.08)
 
 		# overworld connection 
 		self.create_overworld = create_overworld
@@ -44,6 +51,10 @@ class Level:
 		# user interface 
 		self.change_coins = change_coins
 
+		#nb clés
+		self.coins = 0
+		print(self.coins)
+
 		# dust 
 		self.dust_sprite = pygame.sprite.GroupSingle()
 		self.player_on_ground = False
@@ -54,6 +65,10 @@ class Level:
 		# terrain setup
 		terrain_layout = import_csv_layout(level_data['terrain'])
 		self.terrain_sprites = self.create_tile_group(terrain_layout,'terrain')
+
+		# platform setup
+		platform_layout = import_csv_layout(level_data['platform'])
+		self.platform_sprites = self.create_tile_group(platform_layout,'platform')
 
 		# crates 
 		crate_layout = import_csv_layout(level_data['crates'])
@@ -66,8 +81,11 @@ class Level:
 		# decoration
 		self.sky = Sky(8)
 		level_width = len(terrain_layout[0]) * tile_size
-		self.water = Water(screen_height - 20,level_width)
 		self.clouds = Clouds(400,level_width,30)
+
+		self.bulle = Bulle(self.display_surface, screen_width, screen_height )
+		self.bullelvl0 = Bullelvl0(self.display_surface, screen_width, screen_height)
+		self.bullelvl01 = Bullelvl01(self.display_surface, screen_width, screen_height)
 
 		self.csv_file_path = csv_file_path
 		self.last_csv_modification_time = 0
@@ -86,6 +104,11 @@ class Level:
 						tile_surface = terrain_tile_list[int(val)]
 						sprite = StaticTile(tile_size,x,y,tile_surface)
 
+					if type == 'platform':
+						terrain_tile_list = import_cut_graphics('../graphics/terrain/terrain_tiles.png')
+						tile_surface = terrain_tile_list[int(val)]
+						sprite = StaticTile(tile_size,x,y,tile_surface)
+
 					if type == 'grass':
 						grass_tile_list = import_cut_graphics('../graphics/decoration/grass/grass.png')
 						tile_surface = grass_tile_list[int(val)]
@@ -95,8 +118,7 @@ class Level:
 						sprite = Crate(tile_size,x,y)
 
 					if type == 'coins':
-						if val == '0': sprite = Coin(tile_size,x,y,'../graphics/coins/gold',5)
-						if val == '1': sprite = Coin(tile_size,x,y,'../graphics/coins/silver',1)
+						if val == '0': sprite = Key(tile_size,x,y,1)
 
 					if type == 'fg palms':
 						if val == '0': sprite = Palm(tile_size,x,y,'../graphics/terrain/palm_small',38)
@@ -124,7 +146,7 @@ class Level:
 					sprite = Player((x,y),self.display_surface,self.create_jump_particles,change_health)
 					self.player.add(sprite)
 				if val == '1':
-					hat_surface = pygame.image.load('../graphics/character/hat.png').convert_alpha()
+					hat_surface = pygame.image.load('../graphics/character/teleporter.png').convert_alpha()
 					sprite = StaticTile(tile_size,x,y,hat_surface)
 					self.goal.add(sprite)
 
@@ -150,10 +172,6 @@ class Level:
 		self.terrain_sprites = self.create_tile_group(new_terrain_layout, 'terrain')
 
 
-	def enemy_collision_reverse(self):
-		for enemy in self.enemy_sprites.sprites():
-			if pygame.sprite.spritecollide(enemy,self.constraint_sprites,False):
-				enemy.reverse()
 
 	def create_jump_particles(self,pos):
 		if self.player.sprite.facing_right:
@@ -166,7 +184,7 @@ class Level:
 	def horizontal_movement_collision(self):
 		player = self.player.sprite
 		player.collision_rect.x += player.direction.x * player.speed
-		collidable_sprites = self.terrain_sprites.sprites() + self.crate_sprites.sprites()
+		collidable_sprites = self.terrain_sprites.sprites() + self.crate_sprites.sprites() + self.platform_sprites.sprites()
 		for sprite in collidable_sprites:
 			if sprite.rect.colliderect(player.collision_rect):
 				if player.direction.x < 0:
@@ -181,7 +199,7 @@ class Level:
 	def vertical_movement_collision(self):
 		player = self.player.sprite
 		player.apply_gravity()
-		collidable_sprites = self.terrain_sprites.sprites() + self.crate_sprites.sprites()
+		collidable_sprites = self.terrain_sprites.sprites() + self.crate_sprites.sprites() + self.platform_sprites.sprites()
 
 		for sprite in collidable_sprites:
 			if sprite.rect.colliderect(player.collision_rect):
@@ -233,7 +251,8 @@ class Level:
 			
 	def check_win(self):
 		if pygame.sprite.spritecollide(self.player.sprite,self.goal,False):
-			self.create_overworld(self.current_level,self.new_max_level)
+			if self.coins >= 1:
+				self.create_overworld(self.current_level,self.new_max_level)
 
 	def check_coin_collisions(self):
 		collided_coins = pygame.sprite.spritecollide(self.player.sprite, self.coin_sprites, True)
@@ -241,13 +260,13 @@ class Level:
 			self.coin_sound.play()
 			for coin in collided_coins:
 				self.change_coins(coin.value)
+				self.coins += coin.value
 
 	def run(self):
 		# run the entire game / level 
 		
 		# sky 
 		self.sky.draw(self.display_surface)
-		self.clouds.draw(self.display_surface,self.world_shift)
 
 		# dust particles 
 		self.dust_sprite.update(self.world_shift)
@@ -268,6 +287,10 @@ class Level:
 		self.coin_sprites.update(self.world_shift)
 		self.coin_sprites.draw(self.display_surface)
 
+		#
+		self.platform_sprites.update(self.world_shift)
+		self.platform_sprites.draw(self.display_surface)
+
 		# player sprites
 		self.player.update()
 		self.horizontal_movement_collision()
@@ -286,6 +309,16 @@ class Level:
 
 		self.check_coin_collisions()
 
-		# water 
-		self.water.draw(self.display_surface,self.world_shift)
+		if self.current_level == 0:
+			self.bullelvl0.rect.x += self.world_shift  # Ajustez la position x de l'image
+			self.bullelvl0.draw()
+			self.bullelvl01.rect.x += self.world_shift  # Ajustez la position x de l'image
+			self.bullelvl01.draw()
+
+
+		if self.current_level == 1:
+			self.bulle.rect.x += self.world_shift  # Ajustez la position x de l'image
+			self.bulle.draw()
+
+
 		self.check_csv_modification()
