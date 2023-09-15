@@ -74,7 +74,7 @@ class Level:
 		self.water = Water(screen_height - 20,level_width)
 		self.clouds = Clouds(400,level_width,30)
 
-		self.bulle = Bulle(self.display_surface, screen_width, screen_height)
+		self.bulle = Bulle(self.display_surface, screen_width, screen_height )
 		self.bullelvl0 = Bullelvl0(self.display_surface, screen_width, screen_height)
 		self.bullelvl01 = Bullelvl01(self.display_surface, screen_width, screen_height)
 
