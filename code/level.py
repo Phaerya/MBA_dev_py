@@ -1,4 +1,5 @@
 import os
+import shutil
 import pygame 
 from support import import_csv_layout, import_cut_graphics
 from settings import tile_size, screen_height, screen_width
@@ -19,6 +20,10 @@ class Level:
 		self.level_data = level_data
 		self.camera_x = camera_x  # Store camera position
 		self.camera_y = camera_y
+
+		self.csvInit = f'../levels/{current_level}/level_{current_level}_terrain_init.csv'
+		self.csvCopy = f'../levels/{current_level}/level_{current_level}_terrain.csv'
+		shutil.copyfile(self.csvInit, self.csvCopy)
 
 		# audio 
 		self.coin_sound = pygame.mixer.Sound('../audio/effects/coin.wav')
@@ -140,6 +145,7 @@ class Level:
 		# Load and set up the level again here.
 		# You'll need to recreate tiles, sprites, and any other level-specific data.
 		# For example:
+
 		new_terrain_layout = import_csv_layout(self.level_data['terrain'])
 		self.terrain_sprites = self.create_tile_group(new_terrain_layout, 'terrain')
 

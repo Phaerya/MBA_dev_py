@@ -15,7 +15,7 @@ class Game:
         self.max_health = 100
         self.cur_health = 100
         self.coins = 0
-
+        
         # audio 
         self.level_bg_music = pygame.mixer.Sound('../audio/stage.mp3')
         self.overworld_bg_music = pygame.mixer.Sound('../audio/overworld2.mp3')
