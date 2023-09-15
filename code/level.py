@@ -3,7 +3,7 @@ from support import import_csv_layout, import_cut_graphics
 from settings import tile_size, screen_height, screen_width
 from tiles import Tile, StaticTile, Crate, Key, Palm
 from enemy import Enemy
-from decoration import Sky, Water, Clouds
+from decoration import Sky, Clouds
 from player import Player
 from particles import ParticleEffect
 from game_data import levels
@@ -71,7 +71,6 @@ class Level:
 		# decoration
 		self.sky = Sky(8)
 		level_width = len(terrain_layout[0]) * tile_size
-		self.water = Water(screen_height - 20,level_width)
 		self.clouds = Clouds(400,level_width,30)
 
 		self.bulle = Bulle(self.display_surface, screen_width, screen_height )
@@ -274,9 +273,6 @@ class Level:
 		self.check_win()
 
 		self.check_coin_collisions()
-
-		# water 
-		self.water.draw(self.display_surface,self.world_shift)
 
 		if self.current_level == 0:
 			self.bullelvl0.rect.x += self.world_shift  # Ajustez la position x de l'image
