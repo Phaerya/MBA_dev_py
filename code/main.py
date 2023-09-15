@@ -176,7 +176,7 @@ while True:
             sys.exit()
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_0:
+            if event.key == pygame.K_a:
                 modifier_valeurs_csv(chemin_fichier, ancienne_valeur, nouvelle_valeur)
                 game.create_level(0)
 
