@@ -100,6 +100,7 @@ background_image = pygame.transform.scale(background_image, (screen_width, scree
 clock = pygame.time.Clock()
 game = Game()
 
+
 while True:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
